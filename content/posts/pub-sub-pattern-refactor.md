@@ -139,14 +139,14 @@ notificationUsecase := NewNotificationUsecase(...)
 eventBus.Subscribe("ActivityCreated", NotifyUserOnActivityCreated{notificationUsecase})
 ```
 
-### 重構後的好處
+## 重構後的好處
 
 - 單一職責更明確：Use Case 不需知道 Notification 的存在，後續要新增/異動通知行為只需註冊或退訂事件即可。
 - 更易於測試：測試 Use Case 不用 Mock Notification，只驗證有無發事件。
 - 維護彈性大：日後想加其他副作用處理，只需新加 handler，完全不動原本業務邏輯。
 
 
-### 小結
+## 小結
 這次遇到的問題，看似只是 Use Case 依賴多一層 Notification Use Case，實際上卻讓系統多了一層耦合、降低了彈性。即使依賴的是介面，只要這個介面本質上還是代表另一個 Use Case 的職責，耦合依然存在。
 
 透過引入 Pub/Sub Pattern，用事件傳遞，讓業務流程之間的協作改為事件觸發，而不是互相呼叫，這樣每個 Use Case 都能專注在自己的職責上。
