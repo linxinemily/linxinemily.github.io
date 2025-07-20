@@ -34,11 +34,11 @@ token 須為合法的 JWT token。也就是包含一組用 Base64Url-encoded 的
 
 ##### 2. [The signature](https://developers.facebook.com/docs/facebook-login/limited-login/token/validating#signature)
 
-解碼後的 signature 部分需要和以下步驟產生的結果相同：
+驗證 signature 部分是否合法：
 
 1. 藉由呼叫 [JWKS endpoint](https://developers.facebook.com/docs/facebook-login/limited-login/token/#jwks) 取得一組 public key
     
-    > 打 [JWKS endpoint](https://developers.facebook.com/docs/facebook-login/limited-login/token/#jwks) 會得到一個 json 物件，回傳多組 pub key：
+    > 打 [JWKS endpoint](https://developers.facebook.com/docs/facebook-login/limited-login/token/#jwks) 會得到一個 json 物件，回傳多組 public key：
     > 
     > 
     > ```json
@@ -56,7 +56,8 @@ token 須為合法的 JWT token。也就是包含一組用 Base64Url-encoded 的
     > 
     > 而要使用哪一組 key，需要用解碼的 header 當中所帶的一個屬性 `kid` 去比對，找出相同 `kid`  的那把 key。
     > 
-2. 使用解碼後的 header 當中指定的演算法(欄位： `alg`)以及上述的 public key 對 Base64Url-encoded 的 header 跟 payload 連接的值(`Base64url-encoded header + "." + Base64url-encoded payload`) 加密處理後的結果進行 Base64url-encode。
+2. 使用解碼後的 header 當中指定的演算法(欄位： `alg`)以及上述的 public key 對 Base64Url-encoded 的 header 跟 payload 的組合(`Base64url-encoded header + "." + Base64url-encoded payload`) 進行簽名。
+3. 將簽名處理的結果進行 Base64url 編碼，檢查是否和 signature 相等，如果相等代表簽名有效，JWT 合法
 
 ##### 3. [The standard claims](https://developers.facebook.com/docs/facebook-login/limited-login/token/validating#standard-claims)
 

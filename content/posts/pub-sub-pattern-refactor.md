@@ -14,7 +14,7 @@ tags:
 以某個 domain 下的 Notification Use Case 為例：
 它會根據傳入的 orderID、userID 呼叫外部 API 發送推播通知。
 
-假設有兩個 Use Case：(A)初始化參加活動資料、(B)根據訂單狀態更新活動資料
+假設有兩個 Use Case：(A)初始化參加活動資料、(B)根據訂單狀態更新活動資料。
 
 這兩個 Use Case 都需要在處理後通知用戶，所以他們各自都依賴 **Notification Use Case 介面**，像這樣：
 ```go
