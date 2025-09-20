@@ -134,9 +134,9 @@ Lambda 支援的 pull-based producers：
 
 ## 小結
 
-透過以上介紹，我們理解了 SQS 是一種採用 Queue 模型傳遞訊息的 Message Broker，同時也了解 Queue 與 Stream 都是常見的訊息傳遞模型，並釐清了它們的異同與適用情境。
+透過以上介紹，可以理解到 SQS 是一種採用 Queue 模型傳遞訊息的 Message Broker，同時也整理出 Message Broker 常見的兩種模型：Queue 與 Stream，並釐清它們的異同與適用情境。
 
-在深入探討 SQS 與 Lambda 的整合之前，我們先回顧了 Lambda 與其他服務的整合模式（Push-based 與 Pull-based），再進一步了解 Lambda 如何透過 Event Source Mapping 機制處理 SQS 訊息，包括錯誤處理與逾時機制，以及官方針對這些情況所提供的最佳實務建議。
+接著帶到 Lambda 與其他服務的整合模式（Push-based 與 Pull-based），再進一步理解 Lambda 如何透過 Event Source Mapping 機制處理 SQS 訊息，包括錯誤處理與逾時機制，以及官方針對這些情況所提供的最佳實務建議。
 
 雖然過度糾結於名詞定義並非必要，但對齊這些概念能建立統一的溝通語言，讓討論更有效率；同時，透過理解名詞背後的語義與設計考量，也能更清楚掌握各元件之間的關聯與運作方式。
 
