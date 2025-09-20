@@ -154,4 +154,4 @@ Lambda 支援的 pull-based producers：
 - [實作部分批次回應的最佳實務](https://docs.aws.amazon.com/prescriptive-guidance/latest/lambda-event-filtering-partial-batch-responses-for-sqs/best-practices-partial-batch-responses.html#snowball-anti-patterns)
 - [Lambda SQS 批次項目失敗報告](https://docs.aws.amazon.com/lambda/latest/dg/services-sqs-errorhandling.html#services-sqs-batchfailurereporting)
 
-<small>如果有有任何問題或指教，歡迎下面留言 ʕ•ᴥ•ʔ</small>
+<small>如果有任何問題或指教，歡迎下面留言 ʕ•ᴥ•ʔ</small>
