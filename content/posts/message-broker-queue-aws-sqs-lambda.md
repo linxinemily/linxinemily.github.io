@@ -12,7 +12,7 @@ tags:
 
 在 AWS 架構中，常聽到的 SQS、Kinesis、MQ 等服務，都與 Message 的傳遞和處理相關。此外，一些相關概念和名詞也容易混淆，如 Message Broker、Message Queue、Message Stream 等。
 
-本文將從 Message Broker 的定位出發，逐步比較 Queue vs Stream，最後聚焦於 SQS + Lambda 的整合，包含運作原理和官方最佳實踐整理，一次搞懂這些概念跟背後運作方式。
+本文從 Message Broker 的定位談起，再比較 Message Queue 與 Message Stream，最後聚焦於 SQS + Lambda 的整合，包含運作原理與最佳實踐，一次弄懂這些概念與背後運作方式；內容多參考官方文件並加以歸納整理。
 
 ## 什麼是 Message Broker
 
@@ -136,7 +136,7 @@ Lambda 支援的 pull-based producers：
 
 透過以上介紹，可以理解到 SQS 是一種採用 Queue 模型傳遞訊息的 Message Broker，同時也整理出 Message Broker 常見的兩種模型：Queue 與 Stream，並釐清它們的異同與適用情境。
 
-接著帶到 Lambda 與其他服務的整合模式（Push-based 與 Pull-based），再進一步理解 Lambda 如何透過 Event Source Mapping 機制處理 SQS 訊息，包括錯誤處理與逾時機制，以及官方針對這些情況所提供的最佳實務建議。
+在此基礎上，進一步說明了 Lambda 與其他服務的整合模式（Push-based 與 Pull-based），以及 Lambda 如何透過 Event Source Mapping 機制處理 SQS 訊息，包括錯誤處理與逾時機制，以及官方提供的最佳實務建議。
 
 雖然過度糾結於名詞定義並非必要，但對齊這些概念能建立統一的溝通語言，讓討論更有效率；同時，透過理解名詞背後的語義與設計考量，也能更清楚掌握各元件之間的關聯與運作方式。
 
