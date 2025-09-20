@@ -20,7 +20,9 @@ tags:
 
 Message Broker 是一種中介服務，負責在不同系統間傳遞與緩衝訊息。常見的訊息傳遞模型有 Queue 和 Stream，不同的 broker 系統（SQS、Kinesis、MQ）會支援不同模型。
 
-### Message Queue vs Message Stream
+### Queue vs Stream
+
+兩者都並非特定服務，而是 Message Broker 採用的不同訊息傳遞模式
 
 #### 相似之處
 
