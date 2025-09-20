@@ -10,7 +10,7 @@ tags:
 
 在設計大型資料密集型系統時，經常需要處理大量資料。由於這些處理工作通常既大量又耗時，因此多採用非同步方式處理。此時常需要引入 Message Broker 等相關組件，來解耦「資料傳遞與（緩）儲存」和「接收訊息處理工作」之間的關係。
 
-在 AWS 架構中，常聽到的 SQS、Kinesis、MQ 等服務，都與 Message 的傳遞和處理相關。此外，一些相關概念和名詞也容易混淆，如 Message Broker、Message Queue、Message Stream 等。
+在 AWS 架構中，常聽到的 SQS、Kinesis、MQ 等服務，都與 Message 的傳遞和處理相關。此外，一些相關概念和名詞也容易混淆，如 Message Broker、Queue、Stream 等。
 
 本文從 Message Broker 的定位談起，再比較 Message Queue 與 Message Stream，最後聚焦於 SQS + Lambda 的整合，包含運作原理與最佳實踐，一次弄懂這些概念與背後運作方式；內容多參考官方文件並加以歸納整理。
 
@@ -18,11 +18,12 @@ tags:
 
 ### 定義
 
-Message Broker 是一種中介服務，負責在不同系統間傳遞與緩衝訊息。常見的訊息傳遞模型有 Queue 和 Stream，不同的 broker 系統（SQS、Kinesis、MQ）會支援不同模型。
+Message Broker 是一種中介服務，負責在不同系統間傳遞與緩衝訊息。而 Queue 與 Stream 為 Message Broker 最常採用的兩種不同訊息傳遞模式。
+
+因此，可以將這些概念分層來理解：
+`抽象概念（Message Broker）→ 模式（Queue / Stream）→ 代表服務（SQS / Kinesis / MQ）`
 
 ### Queue vs Stream
-
-兩者都並非特定服務，而是 Message Broker 採用的不同訊息傳遞模式
 
 #### 相似之處
 
@@ -31,7 +32,7 @@ Message Broker 是一種中介服務，負責在不同系統間傳遞與緩衝�
 
 #### 區別
 
-|                | Message Queue                          | Message Stream                       |
+|                | Queue                                  | Stream                               |
 | -------------- | -------------------------------------- | ------------------------------------ |
 | 訊息處理方式   | 競爭模式：只有一個消費者能處理特定訊息 | 共享模式：所有消費者都能處理所有訊息 |
 | 訊息存留       | 讀取後刪除                             | 讀取後保留                           |
