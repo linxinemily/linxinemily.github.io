@@ -8,19 +8,19 @@ tags:
 
 ## TL;DR
 
-在設計大型資料密集型系統時，經常需要處理大量資料。由於這些處理工作通常既大量又耗時，因此多採用非同步方式處理。此時常需要引入 Message Broker 等相關組件，來解耦「資料傳遞與（緩）儲存」和「接收訊息處理工作」之間的關係。
+在資料密集型系統中，龐大而耗時的工作通常以非同步方式處理，並透過一種統稱為「Message Broker」的組件/服務，將分派工作的訊息生產者（producers）與處理工作的訊息消費者（consumers）解耦。
 
-在 AWS 架構中，常聽到的 SQS、Kinesis、MQ 等服務，都與 Message 的傳遞和處理相關。此外，一些相關概念和名詞也容易混淆，如 Message Broker、Queue、Stream 等。
+在 AWS 架構中，常聽到的 SQS、Kinesis、MQ 等服務，都與訊息的傳遞和處理相關。此外，一些相關概念和名詞包括 Message Broker、Message Queue、Message Stream 也容易混淆。
 
-本文從 Message Broker 的定位談起，再比較 Message Queue 與 Message Stream，最後聚焦於 SQS + Lambda 的整合，包含運作原理與最佳實踐，一次弄懂這些概念與背後運作方式；內容多參考官方文件並加以歸納整理。
+本文將從 Message Broker 談起，釐清這幾個名詞的定義和關係，接著聚焦在 SQS + Lambda 的整合，包含運作原理與最佳實踐，一次弄懂這些概念與背後運作方式；內容多參考官方文件並加以歸納整理。
 
-## 什麼是 Message Broker
+## 什麼是 Message Broker、Queue 與 Stream
 
 ### 定義
 
-Message Broker 是一種中介服務，負責在不同系統間傳遞與緩衝訊息。而 Queue 與 Stream 為 Message Broker 最常採用的兩種不同訊息傳遞模式。
+Message Broker 是一種中介服務，或稱為訊息代理，負責在不同系統間傳遞與緩衝訊息。而 Queue 與 Stream 為 Message Broker 最常採用的兩種不同訊息傳遞模式。
 
-因此，可以將這些概念分層來理解：
+因此，大致上可以將這些概念分層理解：
 `抽象概念（Message Broker）→ 模式（Queue / Stream）→ 代表服務（SQS / Kinesis / MQ）`
 
 ### Queue vs Stream
@@ -40,11 +40,13 @@ Message Broker 是一種中介服務，負責在不同系統間傳遞與緩衝�
 | 適合場景       | 任務分配和工作負載分散                 | 事件廣播、即時分析和資料複製         |
 | 重複處理容忍度 | 低                                     | 高                                   |
 
-因此，這兩種模型都可以作為 Lambda 的 producer，而 Lambda 可以作為它們的 consumer，去消費這些訊息池裡面的 message。
+> 📝 **補充** <br>在《Designing Data-Intensive Applications》一書中，Kleppmann 將 Message Broker 分為 AMQP/JMS-style 與 Log-based 兩類，前者對應像 SQS 這樣的 Queue 型（負載平衡），後者則對應像 Kinesis 這樣的 Stream 型（扇出）。
 
 ## Lambda 與事件來源（Event Source）整合模型
 
-Lambda 可以和多種事件來源（Event Source）整合，這些事件來源可以分為 Push-based vs Pull-based 模型。
+因此，Queue 與 Stream 這兩種訊息代理都可以作為 Lambda 的事件來源，而 Lambda 會擔任 consumer，從中取出並處理訊息。整體流程為： `producer（e.g. 後端服務） → Message Broker (Queue / Stream) → consumer (Lambda)`
+
+其中又可以依照 Lambda 和不同事件來源的互動模式（主/被動），將這些事件來源分為 Push-based 與 Pull-based 兩種。
 
 ### Push-based
 
@@ -58,14 +60,14 @@ Lambda 扮演**被動**的角色，由其他服務透過 Trigger 主動調用 La
 
 ### Pull-based
 
-Lambda 作為 Message streams/queues 的 consumer，透過 **Event Source Mapping** 機制**主動**去輪詢（poll）message streams/queues，從中拉取（pull）事件/訊息來處理。
+Lambda 作為 Message Broker 提供的 queue/stream 的 consumer，透過 Event Source Mapping 機制**主動**輪詢（poll）這些資源，從中拉取事件/訊息來處理。
 
-> Event Source Mapping 是 Lambda 服務內建的功能，會負責執行 poller 程式去拉取這些 message streams/queues 裡的訊息、追蹤處理訊息的狀態並管理批次處理和重試邏輯。
+> Event Source Mapping 是 Lambda 服務內建的功能，會負責執行 poller 程式去拉取這些 streams/queues 裡的訊息、追蹤處理訊息的狀態並管理批次處理和重試邏輯。
 
 Lambda 支援的 pull-based producers：
 
-- message streams: Kinesis, DynamoDB, DocumentDB, Self-managed Kafka, MSK
-- message queues: SQS（包含 FIFO）, MQ
+- streams: Kinesis, DynamoDB, DocumentDB, Self-managed Kafka, MSK
+- queues: SQS（包含 FIFO）, MQ
 
 ## SQS + Lambda 運作原理和官方最佳實踐
 
@@ -145,6 +147,7 @@ Lambda 支援的 pull-based producers：
 
 ## 參考資料
 
+- Designing Data-Intensive Applications by Martin Kleppmann (第 11 章：流式處理)
 - [Lambda 非同步調用的錯誤和重試](https://docs.aws.amazon.com/lambda/latest/dg/invocation-async-error-handling.html)
 - [非同步調用 Lambda 函數](https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html)
 - [Event Source Mapping](https://docs.aws.amazon.com/lambda/latest/dg/invocation-eventsourcemapping.html)
