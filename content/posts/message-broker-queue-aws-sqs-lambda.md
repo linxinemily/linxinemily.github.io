@@ -137,14 +137,6 @@ Lambda 支援的 pull-based producers：
 
 因此官方建議可以透過配置 DLQ（Dead Letter Queue），設定最大重試次數（maxReceiveCount），讓這些多次無法成功處理的訊息轉到 DLQ，以便後續人工或自動處理／分析。
 
-## 小結
-
-透過以上介紹，可以理解到 SQS 是一種採用 Queue 模型傳遞訊息的 Message Broker，同時也整理出 Message Broker 常見的兩種模型：Queue 與 Stream，並釐清它們的異同與適用情境。
-
-在此基礎上，進一步說明了 Lambda 與其他服務的整合模式（Push-based 與 Pull-based），以及 Lambda 如何透過 Event Source Mapping 機制處理 SQS 訊息，包括錯誤處理與逾時機制，以及官方提供的最佳實務建議。
-
-雖然過度糾結於名詞定義並非必要，但對齊這些概念能建立統一的溝通語言，讓討論更有效率；同時，透過理解名詞背後的語義與設計考量，也能更清楚掌握各元件之間的關聯與運作方式。
-
 ## 參考資料
 
 - Designing Data-Intensive Applications by Martin Kleppmann (第 11 章：流式處理)
